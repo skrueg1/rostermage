@@ -48,18 +48,41 @@ function App() {
 
       const taskID = e.dataTransfer.getData("taskID");
 
-      const dropPosition = e.nativeEvent.offsetY;
-      const minutesFromStart = Math.floor(dropPosition);
-      const taskStartTime = startTimeInMinutes + minutesFromStart;
+      const taskToMove = [
+          ...unhomedTasks,
+          ...tasksOnSchedule
+      ].find((task) => task.id === taskID);
 
-      const taskToSchedule = unhomedTasks.find((task) => task.id === taskID);
+      if (!taskToMove) return;
 
-      if (taskToSchedule) {
+      const droppedIntoSchedule = e.currentTarget.classList.contains("task-column");
+      const alreadyScheduled = tasksOnSchedule.some((task) => task.id === taskID);
+      const alreadyUnhomed = unhomedTasks.some((task) => task.id === taskID);
+
+      if (droppedIntoSchedule && alreadyScheduled) return;
+      if (!droppedIntoSchedule && alreadyUnhomed) return;
+
+      if (droppedIntoSchedule){
           setTasksOnSchedule((currentTasks) => [
               ...currentTasks,
-              {...taskToSchedule, startTime: taskStartTime}
+              {
+                  ...taskToMove,
+                startTime: startTimeInMinutes + Math.floor(e.nativeEvent.offsetY)
+              }
           ]);
+
           setUnhomedTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskID));
+      }
+      else {
+          setUnhomedTasks((currentTasks) => [
+              ...currentTasks,
+              {
+                  ...taskToMove,
+                  startTime: null
+              }
+          ]);
+
+          setTasksOnSchedule((currentTasks) => currentTasks.filter((task) => task.id !== taskID));
       }
   }
 
@@ -93,7 +116,11 @@ function App() {
                 </form>
             )}
 
-            <div className="unhomed-tasks-container">
+            <div
+                className = "unhomed-tasks-container"
+                onDragOver = {(e) => e.preventDefault()}
+                onDrop = {handleDrop}
+            >
 
                 {unhomedTasks.map((task, index) => (
                     <div
@@ -170,6 +197,8 @@ function App() {
                         <div
                             className = "task-item"
                             key = {task.id}
+                            draggable = {true}
+                            onDragStart = {(e) => e.dataTransfer.setData("taskID", task.id)}
                             style = {{
                                 position: "absolute",
                                 top: `${task.startTime - startTimeInMinutes}px`,
