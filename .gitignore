@@ -9,6 +9,7 @@ lerna-debug.log*
 
 # Dependencies
 node_modules/
+.oxlintrc.json
 
 # Build output
 dist/

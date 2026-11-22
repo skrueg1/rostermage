@@ -4,7 +4,7 @@
   height: 100vh;
 }
 
-.unhomed-task-holder {
+.unhomed-task-side {
   width: 400px;
   background-color: cornflowerblue;
   display: flex;
@@ -13,7 +13,7 @@
   padding: 30px 20px;
 }
 
-.schedule-container {
+.schedule-side {
   flex: 1;
   background-color: antiquewhite;
   display: flex;
@@ -22,7 +22,7 @@
   padding: 30px 20px;
 }
 
-.mock-schedule {
+.schedule-container {
   width: 40%;
   padding: 10px;
   background-color: white;
@@ -31,7 +31,7 @@
   flex: 1;
 }
 
-.tasks-container {
+.unhomed-tasks-container {
   width: 90%;
   padding: 10px;
   border: 1px white solid;
