@@ -9,7 +9,14 @@ function App() {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDuration, setTaskDuration] = useState("");
 
-  function handleSubmit(e) {
+  const [startTime, setStartTime] = useState("08:00");
+  const [endTime, setEndTime] = useState("20:00");
+  const validTimeRange = startTime < endTime;
+  const startTimeInMinutes = Number(startTime.split(":")[0]) * 60 + Number(startTime.split(":")[1]);
+  const endTimeInMinutes = Number(endTime.split(":")[0]) * 60 + Number(endTime.split(":")[1]);
+  const availableMinutes = endTimeInMinutes - startTimeInMinutes;
+
+    function handleSubmit(e) {
       e.preventDefault();
 
       const newTask = {
@@ -73,10 +80,45 @@ function App() {
 
 
         <div className="schedule-side">
+
           <h1>Interactable Schedule</h1>
-          <div className="schedule-container">
+
+            <label>
+                Start time:
+                <input
+                    type = "time"
+                    value = {startTime}
+                    onChange = {(e) => setStartTime(e.target.value)}
+                />
+            </label>
+
+            <label>
+                End time:
+                <input
+                    type = "time"
+                    value = {endTime}
+                    onChange = {(e) => setEndTime(e.target.value)}
+                />
+            </label>
+
+            {!validTimeRange && (
+                <p>End time just be later than start time.</p>
+            )}
+            {validTimeRange && (
+                <p>Available amount of time: {availableMinutes / 60} hours.</p>
+            )}
+
+            <button onClick = {() => {
+                setStartTime("08:00");
+                setEndTime("20:00");
+            }}>
+                Reset
+            </button>
+
+            <div className="schedule-container">
 
           </div>
+
         </div>
 
       </div>
