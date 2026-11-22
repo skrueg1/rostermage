@@ -16,11 +16,17 @@ function App() {
   const endTimeInMinutes = Number(endTime.split(":")[0]) * 60 + Number(endTime.split(":")[1]);
   const availableMinutes = endTimeInMinutes - startTimeInMinutes;
 
+  const hours = [];
+  for (let time = startTimeInMinutes; time <= endTimeInMinutes; time += 60) {
+      hours.push(time);
+  }
+
     function handleSubmit(e) {
       e.preventDefault();
 
       const newTask = {
-          title: taskTitle,
+          id: crypto.randomUUID(),
+          title: taskTitle.trim(),
           duration: Number(taskDuration)
       };
 
@@ -67,7 +73,7 @@ function App() {
 
             <div className="unhomed-tasks-container">
                 {tasks.map((task, index) => (
-                    <div className = "task-item" key = {index}>
+                    <div className = "task-item" key = {task.id}>
                         <h3>{task.title}</h3>
                         <p>{task.duration}</p>
 
@@ -80,8 +86,7 @@ function App() {
 
 
         <div className="schedule-side">
-
-          <h1>Interactable Schedule</h1>
+            <h1>Interactable Schedule</h1>
 
             <label>
                 Start time:
@@ -117,9 +122,15 @@ function App() {
 
             <div className="schedule-container">
 
-          </div>
+                {hours.map((time) => (
+                    <div className = "hour-slot" key = {time}>
+                        {String(Math.floor(time/60)).padStart(2, "0")}:00
+                    </div>
+                ))}
 
-        </div>
+            </div>
+
+            </div>
 
       </div>
   )

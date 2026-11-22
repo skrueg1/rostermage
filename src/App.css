@@ -8,6 +8,12 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
+h1 {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
 h3 {
   margin: 0 0 5px 0;
 }
@@ -47,6 +53,7 @@ p {
   flex-direction: column;
   gap: 25px;
   padding: 30px 20px;
+  overflow-y: auto;
 }
 
 .schedule-container {
@@ -58,9 +65,7 @@ p {
   flex: 1;
 }
 
-
-h1 {
-  text-align: center;
-  padding: 0;
-  margin: 0;
+.hour-slot {
+  height: 50px;
+  border-bottom: 1px solid var(--border);
 }
