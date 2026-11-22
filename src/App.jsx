@@ -60,7 +60,7 @@ function App() {
 
             <div className="unhomed-tasks-container">
                 {tasks.map((task, index) => (
-                    <div key = {index}>
+                    <div className = "task-item" key = {index}>
                         <h3>{task.title}</h3>
                         <p>{task.duration}</p>
 

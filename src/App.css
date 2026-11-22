@@ -4,6 +4,18 @@
   height: 100vh;
 }
 
+h1, h2, h3, h4, h5, h6 {
+
+}
+
+h3 {
+  margin: 0 0 5px 0;
+}
+
+p {
+  margin: 0 0 10px 0;
+}
+
 .unhomed-task-side {
   width: 400px;
   background-color: cornflowerblue;
@@ -11,6 +23,21 @@
   flex-direction: column;
   gap: 25px;
   padding: 30px 20px;
+}
+
+.unhomed-tasks-container {
+  width: 90%;
+  padding: 10px;
+  border: 1px white solid;
+  margin: auto;
+  flex: 1;
+  overflow: scroll;
+}
+
+.task-item {
+  border: 1px solid var(--border);
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .schedule-side {
@@ -31,14 +58,6 @@
   flex: 1;
 }
 
-.unhomed-tasks-container {
-  width: 90%;
-  padding: 10px;
-  border: 1px white solid;
-  margin: auto;
-  flex: 1;
-  overflow: scroll;
-}
 
 h1 {
   text-align: center;
