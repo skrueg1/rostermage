@@ -24,6 +24,10 @@ function App() {
       setShowForm(false);
   }
 
+  function deleteTask(index){
+      setTasks(tasks.filter((task, i) => i !== index));
+  }
+
   return (
       <div className="App">
 
@@ -59,6 +63,8 @@ function App() {
                     <div key = {index}>
                         <h3>{task.title}</h3>
                         <p>{task.duration}</p>
+
+                        <button onClick={() => deleteTask(index)}>Delete</button>
                     </div>
                 ))}
             </div>
