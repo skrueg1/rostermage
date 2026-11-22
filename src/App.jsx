@@ -3,7 +3,8 @@ import './App.css'
 
 function App() {
 
-  const [tasks, setTasks] = useState([]);
+  const [unhomedTasks, setUnhomedTasks] = useState([]);
+  const [tasksOnSchedule, setTasksOnSchedule] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
   const [taskTitle, setTaskTitle] = useState("");
@@ -27,10 +28,11 @@ function App() {
       const newTask = {
           id: crypto.randomUUID(),
           title: taskTitle.trim(),
-          duration: Number(taskDuration)
+          duration: Number(taskDuration),
+          startTime: null
       };
 
-      setTasks((currentTasks) => [...currentTasks, newTask]);
+      setUnhomedTasks((currentTasks) => [...currentTasks, newTask]);
 
       setTaskTitle("");
       setTaskDuration("");
@@ -38,7 +40,27 @@ function App() {
   }
 
   function deleteTask(index){
-      setTasks(tasks.filter((task, i) => i !== index));
+      setUnhomedTasks(unhomedTasks.filter((task, i) => i !== index));
+  }
+
+  function handleDrop(e) {
+      e.preventDefault();
+
+      const taskID = e.dataTransfer.getData("taskID");
+
+      const dropPosition = e.nativeEvent.offsetY;
+      const minutesFromStart = Math.floor(dropPosition);
+      const taskStartTime = startTimeInMinutes + minutesFromStart;
+
+      const taskToSchedule = unhomedTasks.find((task) => task.id === taskID);
+
+      if (taskToSchedule) {
+          setTasksOnSchedule((currentTasks) => [
+              ...currentTasks,
+              {...taskToSchedule, startTime: taskStartTime}
+          ]);
+          setUnhomedTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskID));
+      }
   }
 
   return (
@@ -72,14 +94,20 @@ function App() {
             )}
 
             <div className="unhomed-tasks-container">
-                {tasks.map((task, index) => (
-                    <div className = "task-item" key = {task.id}>
+
+                {unhomedTasks.map((task, index) => (
+                    <div
+                        className = "task-item"
+                        key = {task.id}
+                        draggable = {true}
+                        onDragStart = {(e) => e.dataTransfer.setData("taskID", task.id)}
+                    >
                         <h3>{task.title}</h3>
                         <p>{task.duration}</p>
-
                         <button onClick={() => deleteTask(index)}>Delete</button>
                     </div>
                 ))}
+
             </div>
 
         </div>
@@ -107,7 +135,7 @@ function App() {
             </label>
 
             {!validTimeRange && (
-                <p>End time just be later than start time.</p>
+                <p>End time must be later than start time.</p>
             )}
             {validTimeRange && (
                 <p>Available amount of time: {availableMinutes / 60} hours.</p>
@@ -120,17 +148,46 @@ function App() {
                 Reset
             </button>
 
-            <div className="schedule-container">
+            <div className = "schedule-container">
 
-                {hours.map((time) => (
-                    <div className = "hour-slot" key = {time}>
-                        {String(Math.floor(time/60)).padStart(2, "0")}:00
-                    </div>
-                ))}
+                <div className = "time-column">
+
+                    {hours.map((time) => (
+                        <div className = "hour-slot" key = {time}>
+                            {String(Math.floor(time/60)).padStart(2, "0")}:00
+                        </div>
+                    ))}
+
+                </div>
+
+                <div
+                    className = "task-column"
+                    onDragOver = {(e) => e.preventDefault()}
+                    onDrop = {handleDrop}
+                >
+
+                    {tasksOnSchedule.map((task) => (
+                        <div
+                            className = "task-item"
+                            key = {task.id}
+                            style = {{
+                                position: "absolute",
+                                top: `${task.startTime - startTimeInMinutes}px`,
+                                height: `${task.duration}px`,
+                                left: "5px",
+                                right: "5px"
+                            }}
+                        >
+                            <h3>{task.title}</h3>
+                            <p>{task.duration} minutes</p>
+                        </div>
+                    ))}
+
+                </div>
 
             </div>
 
-            </div>
+        </div>
 
       </div>
   )

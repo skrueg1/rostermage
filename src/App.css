@@ -62,10 +62,33 @@ p {
   background-color: white;
   border-radius: 20px;
   margin: auto;
+  display: flex;
   flex: 1;
 }
 
+.time-column {
+  width: 65px;
+  flex-shrink: 0;
+}
+
 .hour-slot {
-  height: 50px;
+  height: 60px;
+  box-sizing: border-box;
   border-bottom: 1px solid var(--border);
+}
+
+
+.task-column {
+  flex: 1;
+  position: relative;
+  border-left: 1px solid var(--border);
+  min-height: 100%
+}
+
+.task-item {
+  box-sizing: border-box;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  padding: 5px;
 }
